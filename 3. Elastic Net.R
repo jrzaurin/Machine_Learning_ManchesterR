@@ -32,9 +32,8 @@ plot(y = e_net_default_auc , x = log(e_net_default$ lambda ), xlab = 'Log Lambda
 
 
 #put results in a single dataframe
-results = data.frame(actual =  response[ folds >= 9],
-    e_net_default_prob = p_e_net_default[,which.max(e_net_default_auc)], 
-    e_net_default_class = p_e_net_default[,which.max(e_net_default_auc)] > 0.5)
+results$ e_net_default_prob = p_e_net_default[,which.max(e_net_default_auc)]
+results$e_net_default_class = p_e_net_default[,which.max(e_net_default_auc)] > 0.5
     
 auc(results$e_net_default_prob, results$actual )
 accuracy(results$e_net_default_prob > 0.5, results$actual )

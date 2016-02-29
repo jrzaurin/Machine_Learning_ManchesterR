@@ -5,6 +5,7 @@ source('functions.r')
 arrhythmia = read.csv('arrhythmia.csv')
 dim(arrhythmia)
 ldply(arrhythmia, class)
+# Make folds vector to specify holdout set
 
 set.seed(120)    
 folds = sample(1:10, nrow(arrhythmia ), replace = TRUE)
@@ -99,6 +100,6 @@ fmla <- abnormal ~  sex + di_width_ragged_r_wave + di_width_diphasic_derivation_
     v6_amp_r_wave + v6_amp_s_wave + v6_amp_rp_wave + v6_amp_p_wave + 
     v6_amp_t_wave + v6_amp_qrsa + v6_amp_qrsta
 
-
+# Make sparse model matrix
 mm = Matrix::sparse.model.matrix( fmla, data = arrhythmia)
 

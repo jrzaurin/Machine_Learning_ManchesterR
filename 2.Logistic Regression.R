@@ -23,6 +23,8 @@ glm1 = glm(fmla2,  data = arrhythmia[folds < 9, , drop = TRUE], family = binomia
 #make predictions
 p_logistic = predict(glm1, arrhythmia[folds >= 9, ], type =  "response")
 
+results = data.frame(actual =  response[ folds >= 9], logistic_prob = p_logistic )
+
 #get predictive accuracy
 auc(p_logistic, response[folds >= 9] )
 accuracy(p_logistic > 0.5, response[folds >= 9] )
