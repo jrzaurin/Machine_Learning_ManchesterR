@@ -1,4 +1,6 @@
-
+library(plyr)
+library(dplyr)
+#loop through each of the columns in the arrhythmia dataset and check correlation with abnormality
 uni_var = ldply(arrhythmia, function(.x){
     p = 1
     if(is.numeric(.x)){
@@ -12,12 +14,13 @@ uni_var = ldply(arrhythmia, function(.x){
    data.frame(p=p)
         })
 
-arrange(uni_var, p)
+#arrange these by the p value (lowest means more significnat -> more correlation
+uni_var = arrange(uni_var, p)
 
+# select the top 20 variables (excluding the first which is the response) and make into a formula
+fmla2 = formula(paste('abnormal ~', paste(uni_var$.id[2:21] , collapse = ' + ')))
 
-fmla2 = formula(paste('abnormal ~', paste(arrange(uni_var, p)  $.id[2:20] , collapse = ' + ')))
-
-#fit a logistic regression
+#fit a logistic regression to this data
 glm1 = glm(fmla2,  data = arrhythmia[folds < 9, , drop = TRUE], family = binomial())
 
 #make predictions
@@ -27,4 +30,3 @@ results = data.frame(actual =  response[ folds >= 9], logistic_prob = p_logistic
 
 #get predictive accuracy
 auc(p_logistic, response[folds >= 9] )
-accuracy(p_logistic > 0.5, response[folds >= 9] )
